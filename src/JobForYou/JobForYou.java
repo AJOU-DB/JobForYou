@@ -34,7 +34,61 @@ public class JobForYou {
 				+ "원하시는 정보를 얻으셨기를 바랍니다! :)\n");
 		System.exit(0);
 	}
-		
+	
+	public static int displayAreaList() // display List of Area
+	{
+		System.out.println("\n지역 코드를 입력해주세요.\n(ex. 지역이 '서울, 강원'이면, 1만 입력해주세요.)\n"
+				+ "1. 서울, 강원\n"
+				+"2. 부산, 경남\n"
+				+"3. 대구, 경북\n"
+				+ "4. 경기, 인천\n"
+				+"5. 광주, 전라, 제주\n"
+				+"6 대전, 충청");
+		Scanner scan = new Scanner(System.in);
+		int areaCode = scan.nextInt();
+		return areaCode;
+	}
+	
+	public static int displayInterestList() // display List of Interest
+	{
+		System.out.println("\n관심 분야 코드를 입력해주세요.\n(ex. 관심 분야가 '취업지원'이면, 1만 입력해주세요.)\n"
+				+ "1. 취업지원\n"
+				+"2. 교육훈련·체험·인턴\n"
+				+"3. 전문분야 취업지원\n"
+				+ "4. 중소기업 취업지원\n"
+				+"5. 해외진출\n"
+				+"6. 창업\n"
+				+ "7. R&D 지원\n"
+				+"8. 경영 지원\n"
+				+ "9. 자본금 지원\n"
+				+"10. 생활·복지\n"
+				+"11. 건강\n"
+				+ "12. 문화\n"
+				+"13. 주거·금융\n"
+				+"14. 생활비 지원 및 금융 혜택\n"
+				+ "15. 주거 지원\n"
+				+"16. 학자금 지원\n");
+		Scanner scan = new Scanner(System.in);
+		int interestCode = scan.nextInt();
+		return interestCode;
+	}
+	
+	public static String getInfoString(String statement)
+	{
+		System.out.println(statement);
+		Scanner scan = new Scanner(System.in);
+		String answer = scan.nextLine();
+		return answer;
+	}
+	
+	public static int getInfoInt(String statement)
+	{
+		System.out.println(statement);
+		Scanner scan = new Scanner(System.in);
+		int answer = scan.nextInt();
+		return answer;
+	}
+
 		
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
@@ -77,7 +131,6 @@ public class JobForYou {
 				
 				menu();
 				sltNum = scan.nextInt();
-				scan.nextLine();
 				
 				switch(sltNum) 
 				{
@@ -88,6 +141,17 @@ public class JobForYou {
 			
 			else if(choice == 2) //User is new Member
 			{
+				String name = getInfoString("회원 가입을 시작하겠습니다.\n이름을 입력해주세요\n");
+				int age = getInfoInt("만 나이를 숫자로 입력해주세요.\n");
+				email = getInfoString("로그인을 위해 사용할 이메일을 입력해주세요\n");
+				int areaCode = displayAreaList(); // area 정보 추가하기.
+				int interestCode = displayInterestList(); // interest 정보 추가하기.
+				// create new Student
+//				insert into Student values (email,interestCode,areaCode,name,age,area,interest,isHired); 
+				System.out.println("JobForYou 회원가입이 완료되었습니다.");
+				menu();
+				sltNum = scan.nextInt();
+				scan.nextLine();
 				
 			}
 		}
