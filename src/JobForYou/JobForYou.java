@@ -17,7 +17,7 @@ public class JobForYou {
 	{
 		System.out.println("\nJobforYou 서비스는 청년취업정책 정보와 채용행사 정보를 제공하고 있습니다.\n"
 				+ "정기 메일 수신 신청을 선택하시면, 고객님께 맞춤 정보를 정기적으로 메일로 수신해 드립니다.\n"
-				+ "이용하실 서비스 번호를 입력해주세요.\n(ex. 이용하실 서비스가 '정책'이면, 1만 입력해주세요.\n"
+				+ "이용하실 서비스 번호를 입력해주세요.\n(ex. 이용하실 서비스가 '정책'이면, 1만 입력해주세요.)\n"
 				+ "1. 정책 정보 열람\n"
 				+ "2. 채용 행사 정보 열람\n"
 				+ "3. 정기 메일 수신 신청\n" 
@@ -105,7 +105,7 @@ public class JobForYou {
 			case 1: flag = policyList(interestCode, age); //정책 정보 열람
 				break;
 				
-			case 2: //채용행사 정보 열람
+			case 2: flag = recruitmentEventList(areaCode); //채용행사 정보 열람
 				break;
 				
 			case 3: flag = subscribe();//정기 구독 신청
@@ -121,6 +121,33 @@ public class JobForYou {
 		/*select *
 		from jobPolicy
 		where interestCode = ‘interestCode’ and startAge <= age and endAge >= age;*/
+		return CorQ();
+	}
+	
+	public static int recruitmentEventList(int areaCode) // Display RecruitmentEventList
+	{
+//		select *
+//		from RecruitmentEvent
+//		where areaCode = 51;
+		int choice = getInfoInt("\n다른 서비스를 이용하시겠습니까? 원하는 번호를 입력해주세요!\n"
+				+ "1. 채용행사 상세정보 보기\n"
+				+ "2. 서비스 선택 페이지\n"
+				+ "3. 서비스 종료");
+		if (choice == 1) {
+			int eventNoValue = getInfoInt("\n상세정보를 확인하고 싶은 채용행사 번호를 입력해주세요!\n");
+			return recruitmentEventDetail(eventNoValue);
+		} else {
+			return choice == 2 ? 1 : 2;
+		}
+
+	}
+	
+	public static int recruitmentEventDetail(int eventNoValue) // Display RecruitmentEventDetail
+	{
+//		select distinct *
+//		from RecruitmentEventDetail join RecruitmentEvent Using(eventNo)
+//		where eventNo = eventNoValue
+		System.out.print("\n채용행사 상세정보 입니다.\n");
 		return CorQ();
 	}
 	
