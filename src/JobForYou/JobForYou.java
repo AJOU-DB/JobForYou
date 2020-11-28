@@ -7,11 +7,35 @@
 
 package JobForYou;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.*;
+import java.util.Scanner;
 
 public class JobForYou {
 	
 	int flag = 1;
+	String url = "";
+    String user = "postgres";
+    String password = "";
+    Connection conn;
+    Statement st;
+    ResultSet rs;
+    
+//	public static void connectDatabase() // Connect Database
+//	{
+//        conn = DriverManager.getConnection(url, user, password);
+//        st = conn.createStatement();
+//        st.executeUpdate(""); // create table
+//        st.executeUpdate(""); // insert value 
+//	}
+//	
+//	public static void getQuery()
+//	{
+//		rs = st.executeQuery(""); // insert query
+//	}
 	
 	public static int menu() //Show Menu List
 	{
@@ -165,6 +189,7 @@ public class JobForYou {
 	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
+		// connect Database
 		
 		System.out.println("**************JobForYou**************"); //Service Introduction
 		System.out.println("* 저희 서비스는 당신의 나이,관심사,지역 정보에 맞추어 *\n"
