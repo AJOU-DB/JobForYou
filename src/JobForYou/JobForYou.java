@@ -9,7 +9,9 @@ package JobForYou;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.*;
 import java.util.Scanner;
@@ -17,25 +19,6 @@ import java.util.Scanner;
 public class JobForYou {
 	
 	int flag = 1;
-	String url = "";
-    String user = "postgres";
-    String password = "";
-    Connection conn;
-    Statement st;
-    ResultSet rs;
-    
-//	public static void connectDatabase() // Connect Database
-//	{
-//        conn = DriverManager.getConnection(url, user, password);
-//        st = conn.createStatement();
-//        st.executeUpdate(""); // create table
-//        st.executeUpdate(""); // insert value 
-//	}
-//	
-//	public static void getQuery()
-//	{
-//		rs = st.executeQuery(""); // insert query
-//	}
 	
 	public static int menu() //Show Menu List
 	{
@@ -158,7 +141,7 @@ public class JobForYou {
 				+ "2. 서비스 선택 페이지\n"
 				+ "3. 서비스 종료");
 		if (choice == 1) {
-			int eventNoValue = getInfoInt("\n상세정보를 확인하고 싶은 채용행사 번호를 입력해주세요!\n");
+			int eventNoValue = getInfoInt("\n상세정보를 확인하고 싶은 채용행사 번호를 입력해주세요!");
 			return recruitmentEventDetail(eventNoValue);
 		} else {
 			return choice == 2 ? 1 : 2;
@@ -187,16 +170,61 @@ public class JobForYou {
 		return CorQ();
 	}
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws SQLException{
 		// TODO Auto-generated method stub
 		// connect Database
 		
+		Connection conn;
+		Statement stm;
+        PreparedStatement pstm = null;
+        ResultSet r = null;
+        
+        String host = "34.94.93.148";
+        String port = "5432";
+        String db_name = "postgres";
+        String username = "postgres";
+        String password = "uMY1vk*m";
+	    
+		conn = DriverManager.getConnection("jdbc:postgresql://"+host+":"+port+"/"+db_name+"",""+username+"",""+password);//Connect PostgreSQL
+	    
+			if(conn != null)
+			{
+				System.out.println("Connection is good\n"); //Success to Connect
+				String Q1 = "select * from Area"; //select * from College
+				pstm = conn.prepareStatement(Q1);
+				r = pstm.executeQuery();
+				
+				while(r.next())
+				{
+					System.out.println
+					(
+						r.getString(1)+" "+
+						r.getString(2)
+					);
+				}
+			}
+			else System.out.println("Connection failed\n"); //Fail to Connect
+		
+//		public static void connectDatabase() // Connect Database
+//		{
+//	        conn = DriverManager.getConnection(url, user, password);
+//	        st = conn.createStatement();
+//	        st.executeUpdate(""); // create table
+//	        st.executeUpdate(""); // insert value 
+//		}
+	//	
+//		public static void getQuery()
+//		{
+//			rs = st.executeQuery(""); // insert query
+//		}
+		
+        Scanner scan = new Scanner(System.in);
 		System.out.println("**************JobForYou**************"); //Service Introduction
 		System.out.println("* 저희 서비스는 당신의 나이,관심사,지역 정보에 맞추어 *\n"
 						 + "* 취업 지원 정책 및,채용 행사 정보들을 제공해 줍니다. *\n"
 						 + "* 채용 행사의 경우,각 행사마다  상세정보를 제공합니다.*\n*"
 						 + "*************************************\n");
-		Scanner scan = new Scanner(System.in);
+		
 		int flag = 1;
 		int choice = 0; //for Start Service
 		int sltNum = 0; //for menu;
