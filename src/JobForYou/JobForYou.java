@@ -122,7 +122,7 @@ public class JobForYou {
 		return answer;
 	}
 	
-	public static int services(int sltNum,int age,int interestCode,int areaCode,int eventNo, int flag)
+	public static int services(int sltNum,int age,String interestCode,int areaCode,int eventNo, int flag)
 	{
 		switch(sltNum) 
 		{
@@ -140,7 +140,7 @@ public class JobForYou {
 		return flag;
 	}
 
-	public static int policyList(int interestCode, int age) //Display PolicyList
+	public static int policyList(String interestCode, int age) //Display PolicyList
 	{
 		/*select *
 		from jobPolicy
@@ -202,7 +202,7 @@ public class JobForYou {
 		int sltNum = 0; //for menu;
 		int age = 0;
 		int areaCode = 0;
-		int interestCode = 0;
+		String interestCode = null;
 		int eventNo = 0;
 		String email = null;
 		
@@ -239,11 +239,40 @@ public class JobForYou {
 			
 			else if(choice == 2) //User is new Member
 			{
+				Area[] areaData = new Area[6];
+				areaData[0] = new Area(51, "서울, 강원");
+				areaData[1] = new Area(52, "부산, 경남");
+				areaData[2] = new Area(53, "대구, 경북");
+				areaData[3] = new Area(54, "경기, 인천");
+				areaData[4] = new Area(55,"광주, 전라, 제주" );
+				areaData[5] = new Area(56, "대전, 충청");
+				
+				Interest[] interestData = new Interest[16];
+				interestData[0] = new Interest("PLCYTP01", "취업지원");
+				interestData[1] = new Interest("PLCYTP010001", "교육훈련·체험·인턴");
+				interestData[2] = new Interest("PLCYTP010002", "전문분야 취업지원");
+				interestData[3] = new Interest("PLCYTP010003", "중소기업 취업지원");
+				interestData[4] = new Interest("PLCYTP010004", "해외진출");
+				interestData[5] = new Interest("PLCYTP02", "창업");
+				interestData[6] = new Interest("PLCYTP020001", "R&D 지원");
+				interestData[7] = new Interest("PLCYTP020002", "경영 지원");
+				interestData[8] = new Interest("PLCYTP020003", "자본금 지원");
+				interestData[9] = new Interest("PLCYTP03", "생활·복지");
+				interestData[10] = new Interest("PLCYTP030001", "건강");
+				interestData[11] = new Interest("PLCYTP030002", "문화");
+				interestData[12] = new Interest("PLCYTP04", "주거·금융");
+				interestData[13] = new Interest("PLCYTP040001", "생활비 지원 및 금융 혜택");
+				interestData[14] = new Interest("PLCYTP040002", "주거 지원");
+				interestData[15] = new Interest("PLCYTP040003", "학자금 지원");
 				String name = getInfoString("\n회원 가입을 시작하겠습니다.\n이름을 입력해주세요");
 				age = getInfoInt("\n만 나이를 숫자로 입력해주세요.");
 				email = getInfoString("\n로그인을 위해 사용할 이메일을 입력해주세요");
-				areaCode = displayAreaList(); // add area Info
-				interestCode = displayInterestList(); // Add Interest Info
+				int areaChoice = displayAreaList(); // add area Info
+				areaCode = areaData[areaChoice].areaCode;
+				String area = areaData[areaChoice].area;
+				int interestChoice = displayInterestList(); // Add Interest Info
+				interestCode = interestData[interestChoice].interestCode;
+				String interest = interestData[interestChoice].interest;
 				// create new Student
 //				insert into Student values (email,interestCode,areaCode,name,age,area,interest,isHired); 
 				System.out.println("JobForYou 회원가입이 완료되었습니다.");
@@ -258,3 +287,22 @@ public class JobForYou {
 		}
 	}
 }
+
+class Area{
+	int areaCode;
+	String area;
+	public Area(int areaCode, String area) {
+		this.areaCode = areaCode;
+		this.area = area;
+	}
+}
+
+class Interest{
+	String interestCode;
+	String interest;
+	public Interest(String interestCode, String interest) {
+		this.interestCode = interestCode;
+		this.interest = interest;
+	}
+}
+
