@@ -130,18 +130,24 @@ public class JobForYou {
 	{
 		String JobQuery = "select * from JobPolicy where JobPolicy.interestCode ='"+interestCode+"'";
 		ResultSet r = getQuery(JobQuery);
-		System.out.println(name+"님을 위한 정책 정보 리스트를 보여드릴게요!\n");
+		System.out.println("\n"+name+"님을 위한 정책 정보 리스트를 보여드릴게요!\n");
 		while(r.next())
 		{
 			System.out.println
 			(
+					"사업명: " +
 					r.getString(4)+" | "+
+					"사업개요: " +
 					r.getString(5)+" | "+
+					"담당기관명: " +
 					r.getString(6)+" | "+
+					"연령: " +
 					r.getString(9)+" | "+
+					"학력: " +
 					r.getString(10)+" | "+
+					"취업상태: " +
 					r.getString(11)+" | "+
-					"\n------------------------------------------------------------------------------------------------------------------------------\n"
+					"\n----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n"
 			);	
 		}
 		return CorQ();
@@ -162,7 +168,7 @@ public class JobForYou {
 					r.getString(3)+" | "+
 					"행사기간: " +
 					r.getString(4)+" | "+
-					"\n------------------------------------------------------------------------------------------------------------------------------\n"
+					"\n----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n"
 			);	
 		}
 		int choice = getInfoInt("\n다른 서비스를 이용하시겠습니까? 원하는 번호를 입력해주세요!\n"
@@ -201,7 +207,7 @@ public class JobForYou {
 					r.getString(7)+" | "+
 					"오시는길: " +
 					r.getString(8) +" | "+
-					"\n------------------------------------------------------------------------------------------------------------------------------\n"
+					"\n----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n"
 			);	
 		}
 		return CorQ();
@@ -340,15 +346,37 @@ public class JobForYou {
 				name = getInfoString("\n회원 가입을 시작하겠습니다.\n이름을 입력해주세요");
 				age = getInfoInt("\n만 나이를 숫자로 입력해주세요.");
 				email = getInfoString("\n로그인을 위해 사용할 이메일을 입력해주세요");
-				int areaChoice = displayAreaList(); // add area Info
-				areaCode = areaData[areaChoice].areaCode;
-				String area = areaData[areaChoice].area;
-				int interestChoice = displayInterestList(); // Add Interest Info
-				interestCode = interestData[interestChoice].interestCode;
-				String interest = interestData[interestChoice].interest;
-				// create new Student
-//				insert into Student values (email,interestCode,areaCode,name,age,area,interest,isHired); 
-				System.out.println("JobForYou 회원가입이 완료되었습니다.");
+				int areaChoice = displayAreaList();
+				areaCode = areaData[areaChoice - 1].areaCode;
+				int interestChoice = displayInterestList();
+				interestCode = interestData[interestChoice - 1].interestCode;
+				String SignUpQuery = "insert into Student values ('" 
+						+ email 
+						+ "','"
+						+ interestCode
+						+ "','"
+						+ areaCode
+						+ "','"
+						+ name
+						+ "','"
+						+ age
+						+"')";
+				stm.executeUpdate(SignUpQuery); // insert query for create new Student
+
+				// Login
+	            getInfoQuery = "select * from Student where Student.email ='"+email+"'";
+	            r = getQuery(getInfoQuery);
+
+	            while(r.next()) 
+	            {
+	               email = r.getString(1);
+	               interestCode = r.getString(2);
+	               areaCode = r.getInt(3);
+	               name = r.getString(4);
+	               age = r.getInt(5);
+	            }
+
+				System.out.println("JobForYou 회원가입이 완료되었습니다!");
 
 				while(flag == 1) //if flag == 1, repeat service
 				{
