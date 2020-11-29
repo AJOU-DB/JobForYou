@@ -149,28 +149,61 @@ public class JobForYou {
 	
 	public static int recruitmentEventList(String name, int areaCode) throws SQLException // Display RecruitmentEventList
 	{
-//		select *
-//		from RecruitmentEvent
-//		where areaCode = 51;
+		String RecruitmentEventQuery = "select * from RecruitmentEvent where areaCode = '" + areaCode + "'";
+		ResultSet r = getQuery(RecruitmentEventQuery);
+		System.out.println("\n"+name+"님을 위한 채용 행사 리스트를 보여드릴게요!\n");
+		while(r.next())
+		{
+			System.out.println
+			(
+					"채용행사 번호: " +
+					r.getString(1)+" | "+
+					"행사명: " +
+					r.getString(3)+" | "+
+					"행사기간: " +
+					r.getString(4)+" | "+
+					"\n------------------------------------------------------------------------------------------------------------------------------\n"
+			);	
+		}
 		int choice = getInfoInt("\n다른 서비스를 이용하시겠습니까? 원하는 번호를 입력해주세요!\n"
 				+ "1. 채용행사 상세정보 보기\n"
 				+ "2. 서비스 선택 페이지\n"
 				+ "3. 서비스 종료");
 		if (choice == 1) {
 			int eventNoValue = getInfoInt("\n상세정보를 확인하고 싶은 채용행사 번호를 입력해주세요!");
-			return recruitmentEventDetail(eventNoValue);
+			return recruitmentEventDetail(name, eventNoValue);
 		} else {
 			return choice == 2 ? 1 : 2;
 		}
 
 	}
 	
-	public static int recruitmentEventDetail(int eventNoValue) throws SQLException // Display RecruitmentEventDetail
+	public static int recruitmentEventDetail(String name, int eventNoValue) throws SQLException // Display RecruitmentEventDetail
 	{
-//		select distinct *
-//		from RecruitmentEventDetail join RecruitmentEvent Using(eventNo)
-//		where eventNo = eventNoValue
-		System.out.print("\n채용행사 상세정보 입니다.\n");
+		String RecruitmentEventDetailQuery = "select * from RecruitmentEventDetail where eventNo = '" + eventNoValue + "'";
+		ResultSet r = getQuery(RecruitmentEventDetailQuery);
+		System.out.println("\n"+name+"님, " + eventNoValue + "번 채용 행사의 상세 정보를 보여드릴게요!\n");
+		while(r.next())
+		{
+			System.out.println
+			(
+					"행사명: " +
+					r.getString(2)+" | "+
+					"행사기간: " +
+					r.getString(3)+" | "+
+					"행사장소: " +
+					r.getString(4)+" | "+
+					"이메일: " +
+					r.getString(5)+" | "+
+					"문의전화: " +
+					r.getString(6)+" | "+
+					"담당자: " +
+					r.getString(7)+" | "+
+					"오시는길: " +
+					r.getString(8) +" | "+
+					"\n------------------------------------------------------------------------------------------------------------------------------\n"
+			);	
+		}
 		return CorQ();
 	}
 	
