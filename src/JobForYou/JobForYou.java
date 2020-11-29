@@ -21,6 +21,7 @@ public class JobForYou {
 	int flag = 1;
 	static Connection conn;
 	static Statement stm;
+	static String email = null;
     
 	public static int menu() //Show Menu List
 	{
@@ -107,17 +108,17 @@ public class JobForYou {
 		return answer;
 	}
 	
-	public static int services(int sltNum,int age,String interestCode,int areaCode,int eventNo, int flag)
+	public static int services(int sltNum, String interestCode, int areaCode, int flag)
 	{
 		switch(sltNum) 
 		{
-			case 1: flag = policyList(interestCode, age); //정책 정보 열람
+			case 1: flag = policyList(interestCode); //정책 정보 열람
 				break;
 				
 			case 2: flag = recruitmentEventList(areaCode); //채용행사 정보 열람
 				break;
 				
-			case 3: flag = subscribe();//정기 구독 신청
+			case 3: flag = subscribe(email); //정기 구독 신청
 				break;
 				
 			case 4 : flag = 2;
@@ -125,15 +126,15 @@ public class JobForYou {
 		return flag;
 	}
 
-	public static int policyList(String interestCode, int age) //Display PolicyList
+	public static int policyList(String interestCode, int age, String email) throws SQLException //Display PolicyList
 	{
-		/*select *
-		from jobPolicy
-		where interestCode = ‘interestCode’ and startAge <= age and endAge >= age;*/
+		String JobQuery = "select * from JobPolicy where JobPolicy.interestCode ='"+interestCode+"'";
+		ResultSet r = getQuery(JobQuery);
+		
 		return CorQ();
 	}
 	
-	public static int recruitmentEventList(int areaCode) // Display RecruitmentEventList
+	public static int recruitmentEventList(int areaCode) throws SQLException // Display RecruitmentEventList
 	{
 //		select *
 //		from RecruitmentEvent
@@ -151,7 +152,7 @@ public class JobForYou {
 
 	}
 	
-	public static int recruitmentEventDetail(int eventNoValue) // Display RecruitmentEventDetail
+	public static int recruitmentEventDetail(int eventNoValue) throws SQLException // Display RecruitmentEventDetail
 	{
 //		select distinct *
 //		from RecruitmentEventDetail join RecruitmentEvent Using(eventNo)
@@ -161,12 +162,12 @@ public class JobForYou {
 	}
 	
 	
-	public static int subscribe() //Regular Mail Subscription
+	public static int subscribe(String email) throws SQLException //Regular Mail Subscription
 	{
 		System.out.print("\n정기 메일 수신을 신청해 주셔서 감사합니다.\n"
 				+ "청년취업정보와 채용행사 정보를 정기적으로 받아보실 수 있습니다!\n");
 		Scanner scan = new Scanner(System.in);
-		String email = getInfoString("아래에  메일 수신하실 메일 주소를 입력해주세요.");
+		email = getInfoString("아래에  메일 수신하실 메일 주소를 입력해주세요.");
 		System.out.print("\n정기 메일 수신 신청이 완료되었습니다.\n"
 				+ "확인 메일을 보내드렸으니 메일함을 확인해 보세요!\n");
 		return CorQ();
@@ -209,12 +210,12 @@ public class JobForYou {
 		int flag = 1;
 		int choice = 0; //for Start Service
 		int sltNum = 0; //for menu;
+		String name = null;
 		int age = 0;
 		int areaCode = 0;
 		String interestCode = null;
-		int eventNo = 0;
-		String email = null;
-		String Query = null;
+		String eQuery = null;
+		String getInfoQuery = null;
 		
 		System.out.println("서비스를 이용하실건가요? 알맞은 번호를 입력해주세요!\n" //Question to User(Continue or Quit)
 				+ "이용할 것이다. ->숫자 1을 입력해주세요!\n"
@@ -237,21 +238,28 @@ public class JobForYou {
 			if(choice == 1) //User is member of our Service
 			{	
 				email = getInfoString("\n로그인을 위한 이메일을 입력해 주세요!");		
-				Query = "select email from Student where email = '" + email + "'";
-				r = getQuery(Query);
+				eQuery = "select name from Student where email = '" + email + "'";
+				r = getQuery(eQuery);
 				
 				while(r.next())
+				{ System.out.println ("다시 만나서 반갑습니다 "+r.getString(1)+"님! 오늘도 좋은 정보 얻고 가세요 :)"); }
+				
+				getInfoQuery = "select * from Student where Student.email ='"+email+"'";
+				r = getQuery(getInfoQuery);
+				
+				while(r.next()) 
 				{
-					System.out.println
-					(
-							"다시 만나서 반갑습니다! "+r.getString(1)+"님! 오늘도 좋은 정보 얻고 가세요 :)"
-					);
+					email = r.getString(1);
+					interestCode = r.getString(2);
+					areaCode = r.getInt(3);
+					name = r.getString(4);
+					age = r.getInt(5);
 				}
 				
 				while(flag == 1) //if flag == 1, repeat service
 				{
 					sltNum = menu();
-					flag = services(sltNum,age,interestCode,areaCode,eventNo, flag);
+					flag = services(sltNum,interestCode,areaCode,flag);
 				}
 				Quit(); //flag is 2, so User want to quit.
 			}
@@ -283,7 +291,7 @@ public class JobForYou {
 				interestData[13] = new Interest("PLCYTP040001", "생활비 지원 및 금융 혜택");
 				interestData[14] = new Interest("PLCYTP040002", "주거 지원");
 				interestData[15] = new Interest("PLCYTP040003", "학자금 지원");
-				String name = getInfoString("\n회원 가입을 시작하겠습니다.\n이름을 입력해주세요");
+				name = getInfoString("\n회원 가입을 시작하겠습니다.\n이름을 입력해주세요");
 				age = getInfoInt("\n만 나이를 숫자로 입력해주세요.");
 				email = getInfoString("\n로그인을 위해 사용할 이메일을 입력해주세요");
 				int areaChoice = displayAreaList(); // add area Info
@@ -299,7 +307,7 @@ public class JobForYou {
 				while(flag == 1) //if flag == 1, repeat service
 				{
 					sltNum = menu();
-					flag = services(sltNum,age,interestCode,areaCode,eventNo, flag);
+					flag = services(sltNum,interestCode,areaCode,flag);
 				}
 				Quit(); //flag is 2, so User want to quit.
 			}
