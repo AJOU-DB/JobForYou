@@ -317,7 +317,7 @@ public class JobForYou {
 	               age = r.getInt(5);
 	            }
 
-				System.out.println("JobForYou 회원가입이 완료되었습니다.");
+				System.out.println("JobForYou 회원가입이 완료되었습니다!");
 
 				while(flag == 1) //if flag == 1, repeat service
 				{
