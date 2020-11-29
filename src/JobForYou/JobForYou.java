@@ -108,17 +108,17 @@ public class JobForYou {
 		return answer;
 	}
 	
-	public static int services(int sltNum, String interestCode, String email, int areaCode, int flag) throws SQLException
+	public static int services(int sltNum, String name, String interestCode, String email, int areaCode, int flag) throws SQLException
 	{
 		switch(sltNum) 
 		{
-			case 1: flag = policyList(interestCode, email); //정책 정보 열람
+			case 1: flag = policyList(name, interestCode, email); //정책 정보 열람
 				break;
 				
-			case 2: flag = recruitmentEventList(areaCode); //채용행사 정보 열람
+			case 2: flag = recruitmentEventList(name, areaCode); //채용행사 정보 열람
 				break;
 				
-			case 3: flag = subscribe(email); //정기 구독 신청
+			case 3: flag = subscribe(name, email); //정기 구독 신청
 				break;
 				
 			case 4 : flag = 2;
@@ -126,24 +126,28 @@ public class JobForYou {
 		return flag;
 	}
 
-	public static int policyList(String interestCode, String email) throws SQLException //Display PolicyList
+	public static int policyList(String name, String interestCode, String email) throws SQLException //Display PolicyList
 	{
 		String JobQuery = "select * from JobPolicy where JobPolicy.interestCode ='"+interestCode+"'";
 		ResultSet r = getQuery(JobQuery);
+		System.out.println(name+"님을 위한 정책 정보 리스트를 보여드릴게요!\n");
 		while(r.next())
 		{
 			System.out.println
 			(
-					r.getString(1)+"\t"+
-					r.getString(2)+"\t"+
-					r.getString(3)+"\t"+
-					r.getString(4)
+					r.getString(4)+" | "+
+					r.getString(5)+" | "+
+					r.getString(6)+" | "+
+					r.getString(9)+" | "+
+					r.getString(10)+" | "+
+					r.getString(11)+" | "+
+					"\n------------------------------------------------------------------------------------------------------------------------------\n"
 			);	
 		}
 		return CorQ();
 	}
 	
-	public static int recruitmentEventList(int areaCode) throws SQLException // Display RecruitmentEventList
+	public static int recruitmentEventList(String name, int areaCode) throws SQLException // Display RecruitmentEventList
 	{
 //		select *
 //		from RecruitmentEvent
@@ -171,7 +175,7 @@ public class JobForYou {
 	}
 	
 	
-	public static int subscribe(String email) throws SQLException //Regular Mail Subscription
+	public static int subscribe(String name, String email) throws SQLException //Regular Mail Subscription
 	{
 		System.out.print("\n정기 메일 수신을 신청해 주셔서 감사합니다.\n"
 				+ "청년취업정보와 채용행사 정보를 정기적으로 받아보실 수 있습니다!\n");
@@ -268,7 +272,7 @@ public class JobForYou {
 				while(flag == 1) //if flag == 1, repeat service
 				{
 					sltNum = menu();
-					flag = services(sltNum,interestCode,email,areaCode,flag);
+					flag = services(sltNum,name,interestCode,email,areaCode,flag);
 				}
 				Quit(); //flag is 2, so User want to quit.
 			}
@@ -316,7 +320,7 @@ public class JobForYou {
 				while(flag == 1) //if flag == 1, repeat service
 				{
 					sltNum = menu();
-					flag = services(sltNum,interestCode,email,areaCode,flag);
+					flag = services(sltNum,name,interestCode,email,areaCode,flag);
 				}
 				Quit(); //flag is 2, so User want to quit.
 			}
