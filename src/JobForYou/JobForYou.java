@@ -19,7 +19,9 @@ import java.util.Scanner;
 public class JobForYou {
 	
 	int flag = 1;
-	
+	static Connection conn;
+	static Statement stm;
+    
 	public static int menu() //Show Menu List
 	{
 		System.out.println("\nJobforYou 서비스는 청년취업정책 정보와 채용행사 정보를 제공하고 있습니다.\n"
@@ -170,53 +172,32 @@ public class JobForYou {
 		return CorQ();
 	}
 	
+	public static ResultSet getQuery(String Query) throws SQLException
+	{
+		ResultSet r = stm.executeQuery(Query); // insert query
+	    return r;
+	}
+	
 	public static void main(String[] args) throws SQLException{
 		// TODO Auto-generated method stub
 		// connect Database
-		
-		Connection conn;
-		Statement stm;
-        PreparedStatement pstm = null;
-        ResultSet r = null;
-        
+		        
         String host = "34.94.93.148";
         String port = "5432";
         String db_name = "postgres";
         String username = "postgres";
         String password = "uMY1vk*m";
-	    
+      
+        ResultSet r;
 		conn = DriverManager.getConnection("jdbc:postgresql://"+host+":"+port+"/"+db_name+"",""+username+"",""+password);//Connect PostgreSQL
+	    stm = conn.createStatement();
 	    
+		try {
 			if(conn != null)
 			{
-				System.out.println("Connection is good\n"); //Success to Connect
-				String Q1 = "select * from Area"; //select * from College
-				pstm = conn.prepareStatement(Q1);
-				r = pstm.executeQuery();
-				
-				while(r.next())
-				{
-					System.out.println
-					(
-						r.getString(1)+" "+
-						r.getString(2)
-					);
-				}
+				System.out.println("JobForYou 서비스를 시작합니다.\n"); //Success to Connect
 			}
 			else System.out.println("Connection failed\n"); //Fail to Connect
-		
-//		public static void connectDatabase() // Connect Database
-//		{
-//	        conn = DriverManager.getConnection(url, user, password);
-//	        st = conn.createStatement();
-//	        st.executeUpdate(""); // create table
-//	        st.executeUpdate(""); // insert value 
-//		}
-	//	
-//		public static void getQuery()
-//		{
-//			rs = st.executeQuery(""); // insert query
-//		}
 		
         Scanner scan = new Scanner(System.in);
 		System.out.println("**************JobForYou**************"); //Service Introduction
@@ -233,6 +214,7 @@ public class JobForYou {
 		String interestCode = null;
 		int eventNo = 0;
 		String email = null;
+		String Query = null;
 		
 		System.out.println("서비스를 이용하실건가요? 알맞은 번호를 입력해주세요!\n" //Question to User(Continue or Quit)
 				+ "이용할 것이다. ->숫자 1을 입력해주세요!\n"
@@ -253,9 +235,18 @@ public class JobForYou {
 			scan.nextLine();
 			
 			if(choice == 1) //User is member of our Service
-			{					
-				email = getInfoString("\n로그인을 위한 이메일을 입력해 주세요!");
-				System.out.println("다시 만나서 반갑습니다"+email+"님! 오늘도 좋은 정보 얻고 가세요 :)");
+			{	
+				email = getInfoString("\n로그인을 위한 이메일을 입력해 주세요!");		
+				Query = "select email from Student where email = '" + email + "'";
+				r = getQuery(Query);
+				
+				while(r.next())
+				{
+					System.out.println
+					(
+							"다시 만나서 반갑습니다! "+r.getString(1)+"님! 오늘도 좋은 정보 얻고 가세요 :)"
+					);
+				}
 				
 				while(flag == 1) //if flag == 1, repeat service
 				{
@@ -313,24 +304,27 @@ public class JobForYou {
 				Quit(); //flag is 2, so User want to quit.
 			}
 		}
-	}
+		
+	}catch (SQLException ex) 
+	{ throw ex; }
 }
 
-class Area{
-	int areaCode;
-	String area;
-	public Area(int areaCode, String area) {
-		this.areaCode = areaCode;
-		this.area = area;
+	static class Area{
+		int areaCode;
+		String area;
+		public Area(int areaCode, String area) {
+			this.areaCode = areaCode;
+			this.area = area;
+		}
 	}
-}
-
-class Interest{
-	String interestCode;
-	String interest;
-	public Interest(String interestCode, String interest) {
-		this.interestCode = interestCode;
-		this.interest = interest;
+	
+	static class Interest{
+		String interestCode;
+		String interest;
+		public Interest(String interestCode, String interest) {
+			this.interestCode = interestCode;
+			this.interest = interest;
+		}
 	}
 }
 
