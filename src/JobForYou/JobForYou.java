@@ -108,11 +108,11 @@ public class JobForYou {
 		return answer;
 	}
 	
-	public static int services(int sltNum, String interestCode, int areaCode, int flag)
+	public static int services(int sltNum, String interestCode, String email, int areaCode, int flag) throws SQLException
 	{
 		switch(sltNum) 
 		{
-			case 1: flag = policyList(interestCode); //정책 정보 열람
+			case 1: flag = policyList(interestCode, email); //정책 정보 열람
 				break;
 				
 			case 2: flag = recruitmentEventList(areaCode); //채용행사 정보 열람
@@ -126,11 +126,20 @@ public class JobForYou {
 		return flag;
 	}
 
-	public static int policyList(String interestCode, int age, String email) throws SQLException //Display PolicyList
+	public static int policyList(String interestCode, String email) throws SQLException //Display PolicyList
 	{
 		String JobQuery = "select * from JobPolicy where JobPolicy.interestCode ='"+interestCode+"'";
 		ResultSet r = getQuery(JobQuery);
-		
+		while(r.next())
+		{
+			System.out.println
+			(
+					r.getString(1)+"\t"+
+					r.getString(2)+"\t"+
+					r.getString(3)+"\t"+
+					r.getString(4)
+			);	
+		}
 		return CorQ();
 	}
 	
@@ -259,7 +268,7 @@ public class JobForYou {
 				while(flag == 1) //if flag == 1, repeat service
 				{
 					sltNum = menu();
-					flag = services(sltNum,interestCode,areaCode,flag);
+					flag = services(sltNum,interestCode,email,areaCode,flag);
 				}
 				Quit(); //flag is 2, so User want to quit.
 			}
@@ -307,7 +316,7 @@ public class JobForYou {
 				while(flag == 1) //if flag == 1, repeat service
 				{
 					sltNum = menu();
-					flag = services(sltNum,interestCode,areaCode,flag);
+					flag = services(sltNum,interestCode,email,areaCode,flag);
 				}
 				Quit(); //flag is 2, so User want to quit.
 			}
