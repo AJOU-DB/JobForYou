@@ -21,6 +21,7 @@ public class JobForYou {
 	int flag = 1;
 	static Connection conn;
 	static Statement stm;
+	static String email = null;
     
 	public static int menu() //Show Menu List
 	{
@@ -209,12 +210,12 @@ public class JobForYou {
 		int flag = 1;
 		int choice = 0; //for Start Service
 		int sltNum = 0; //for menu;
+		String name = null;
 		int age = 0;
 		int areaCode = 0;
 		String interestCode = null;
 		int eventNo = 0;
-		String email = null;
-		String Query = null;
+		String eQuery = null;
 		
 		System.out.println("서비스를 이용하실건가요? 알맞은 번호를 입력해주세요!\n" //Question to User(Continue or Quit)
 				+ "이용할 것이다. ->숫자 1을 입력해주세요!\n"
@@ -237,8 +238,8 @@ public class JobForYou {
 			if(choice == 1) //User is member of our Service
 			{	
 				email = getInfoString("\n로그인을 위한 이메일을 입력해 주세요!");		
-				Query = "select email from Student where email = '" + email + "'";
-				r = getQuery(Query);
+				eQuery = "select name from Student where email = '" + email + "'";
+				r = getQuery(eQuery);
 				
 				while(r.next())
 				{
@@ -283,17 +284,39 @@ public class JobForYou {
 				interestData[13] = new Interest("PLCYTP040001", "생활비 지원 및 금융 혜택");
 				interestData[14] = new Interest("PLCYTP040002", "주거 지원");
 				interestData[15] = new Interest("PLCYTP040003", "학자금 지원");
-				String name = getInfoString("\n회원 가입을 시작하겠습니다.\n이름을 입력해주세요");
+				name = getInfoString("\n회원 가입을 시작하겠습니다.\n이름을 입력해주세요");
 				age = getInfoInt("\n만 나이를 숫자로 입력해주세요.");
 				email = getInfoString("\n로그인을 위해 사용할 이메일을 입력해주세요");
 				int areaChoice = displayAreaList(); // add area Info
 				areaCode = areaData[areaChoice].areaCode;
-				String area = areaData[areaChoice].area;
 				int interestChoice = displayInterestList(); // Add Interest Info
 				interestCode = interestData[interestChoice].interestCode;
-				String interest = interestData[interestChoice].interest;
-				// create new Student
-//				insert into Student values (email,interestCode,areaCode,name,age,area,interest,isHired); 
+				String SignUpQuery = "insert into Student values ('" 
+						+ email 
+						+ "','"
+						+ interestCode
+						+ "','"
+						+ areaCode
+						+ "','"
+						+ name
+						+ "','"
+						+ age
+						+"')";
+				stm.executeUpdate(SignUpQuery); // insert query for create new Student
+				
+				// Login
+	            String getInfoQuery = "select * from Student where Student.email ='"+email+"'";
+	            r = getQuery(getInfoQuery);
+	            
+	            while(r.next()) 
+	            {
+	               email = r.getString(1);
+	               interestCode = r.getString(2);
+	               areaCode = r.getInt(3);
+	               name = r.getString(4);
+	               age = r.getInt(5);
+	            }
+
 				System.out.println("JobForYou 회원가입이 완료되었습니다.");
 
 				while(flag == 1) //if flag == 1, repeat service
