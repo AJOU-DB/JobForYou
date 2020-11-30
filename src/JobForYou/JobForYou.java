@@ -256,19 +256,19 @@ public class JobForYou {
 				while(r.next())
 				{
 							s = s + "사업명: " +
-									r.getString(4)+" | "+
-									"사업개요: " +
-									r.getString(5)+" | "+
-									"담당기관명: " +
-									r.getString(6)+" | "+
-									"연령: " +
-									r.getString(9)+" | "+
-									"학력: " +
-									r.getString(10)+" | "+
-									"취업상태: " +
-									r.getString(11)+" | "+
-									"\n----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n";
-							}
+							r.getString(4)+" | "+
+							"사업개요: " +
+							r.getString(5)+" | "+
+							"담당기관명: " +
+							r.getString(6)+" | "+
+							"연령: " +
+							r.getString(9)+" | "+
+							"학력: " +
+							r.getString(10)+" | "+
+							"취업상태: " +
+							r.getString(11)+" | "+
+							"\n----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n";
+			    }
 		    } else {
 		    	String RecruitmentEventQuery = "select * from RecruitmentEvent where areaCode = '" + areaCode + "'";
 				ResultSet r = getQuery(RecruitmentEventQuery);
@@ -285,8 +285,7 @@ public class JobForYou {
 				}
 		    }
 		    String payload = "{\"email\": \"" + email + "\", \"msg\": \"" + s + "\"}";
-		    StringEntity entity = new StringEntity(payload,
-	                ContentType.APPLICATION_FORM_URLENCODED);
+		    StringEntity entity = new StringEntity(payload,ContentType.APPLICATION_FORM_URLENCODED);
 
 	        CloseableHttpClient httpClient = HttpClientBuilder.create().build();
 	        HttpPost request = new HttpPost("http://35.232.159.201:3001/api/mail");
