@@ -168,6 +168,71 @@ public class JobForYou {
 				+ "청년취업정보와 채용행사 정보를 정기적으로 받아보실 수 있습니다!\n");
 		Scanner scan = new Scanner(System.in);
 		email = getInfoString("아래에  메일 수신하실 메일 주소를 입력해주세요.");
+<<<<<<< Updated upstream
+=======
+		
+		try {
+//			HttpPost post = new HttpPost(URL);
+//			JSONObject payload = new JSONObject();
+//			payload.put("name", "myName");
+//			payload.put("age", "20");
+//			post.setEntity(new StringEntity(payload.toString(), ContentType.APPLICATION_JSON))
+			
+			double dValue = Math.random();
+		    int iValue = (int)(dValue * 10);
+		    String s = "";
+		    if(iValue % 2 == 0) {
+		    	String JobQuery = "select * from JobPolicy where JobPolicy.interestCode ='"+ interestCode +"'";
+				ResultSet r = getQuery(JobQuery);
+				
+				s = s + "\n"+name+"님을 위한 채용 행사 리스트를 보여드릴게요!\n";
+				while(r.next())
+				{
+							s = s + "사업명: " +
+							r.getString(4)+" | "+
+							"사업개요: " +
+							r.getString(5)+" | "+
+							"담당기관명: " +
+							r.getString(6)+" | "+
+							"연령: " +
+							r.getString(9)+" | "+
+							"학력: " +
+							r.getString(10)+" | "+
+							"취업상태: " +
+							r.getString(11)+" | "+
+							"\n----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n";	
+				}
+		    } else {
+		    	String RecruitmentEventQuery = "select * from RecruitmentEvent where areaCode = '" + areaCode + "'";
+				ResultSet r = getQuery(RecruitmentEventQuery);
+				s = s +"\n"+name+"님을 위한 채용 행사 리스트를 보여드릴게요!\n";
+				while(r.next())
+				{
+							s = s + "채용행사 번호: " +
+							r.getString(1)+" | "+
+							"행사명: " +
+							r.getString(3)+" | "+
+							"행사기간: " +
+							r.getString(4)+" | "+
+							"\n----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n";	
+				}
+		    }
+		    String payload = "{\"email\": \"" + email + "\", \"msg\": \"" + s + "\"}";
+		    StringEntity entity = new StringEntity(payload,
+	                ContentType.APPLICATION_FORM_URLENCODED);
+
+	        CloseableHttpClient httpClient = HttpClientBuilder.create().build();
+	        HttpPost request = new HttpPost("http://35.232.159.201:3001/api/mail");
+	        request.setEntity(entity);
+		    
+			//String jsonInputString = "{\"email\": \"" + email + "\", \"msg\": \"" + s + "\"}";
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		
+>>>>>>> Stashed changes
 		System.out.print("\n정기 메일 수신 신청이 완료되었습니다.\n"
 				+ "확인 메일을 보내드렸으니 메일함을 확인해 보세요!\n");
 		return CorQ();
