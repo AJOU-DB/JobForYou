@@ -252,17 +252,23 @@ public class JobForYou {
 		    	String JobQuery = "select * from JobPolicy where JobPolicy.interestCode ='"+ interestCode +"'";
 				ResultSet r = getQuery(JobQuery);
 				
-				s = s + "\n"+name+"님을 위한 채용 행사 리스트를 보여드릴게요!\n";
+				s = s + "\n"+name+"님을 위한 정책 리스트를 보여드릴게요!\n";
 				while(r.next())
 				{
-							s = s + "채용행사 번호: " +
-							r.getString(1)+" | "+
-							"행사명: " +
-							r.getString(3)+" | "+
-							"행사기간: " +
-							r.getString(4)+" | "+
-							"\n----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n";	
-				}
+							s = s + "사업명: " +
+									r.getString(4)+" | "+
+									"사업개요: " +
+									r.getString(5)+" | "+
+									"담당기관명: " +
+									r.getString(6)+" | "+
+									"연령: " +
+									r.getString(9)+" | "+
+									"학력: " +
+									r.getString(10)+" | "+
+									"취업상태: " +
+									r.getString(11)+" | "+
+									"\n----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n";
+							}
 		    } else {
 		    	String RecruitmentEventQuery = "select * from RecruitmentEvent where areaCode = '" + areaCode + "'";
 				ResultSet r = getQuery(RecruitmentEventQuery);
