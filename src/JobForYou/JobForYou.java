@@ -7,6 +7,12 @@
 
 package JobForYou;
 
+import java.io.BufferedInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.*;
+import java.net.http.*;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -16,12 +22,23 @@ import java.sql.Statement;
 import java.util.*;
 import java.util.Scanner;
 
+import org.apache.hc.client5.http.classic.methods.HttpPost;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
+import org.apache.hc.client5.http.impl.classic.HttpClientBuilder;
+import org.apache.hc.core5.http.io.entity.StringEntity;
+import org.apache.hc.core5.http.*;
+
+
 public class JobForYou {
 	
 	int flag = 1;
 	static Connection conn;
 	static Statement stm;
 	static String email = null;
+	
+	static int areaCode = 0;
+	static String interestCode = null;
     
 	public static int menu() //Show Menu List
 	{
@@ -220,6 +237,62 @@ public class JobForYou {
 				+ "청년취업정보와 채용행사 정보를 정기적으로 받아보실 수 있습니다!\n");
 		Scanner scan = new Scanner(System.in);
 		email = getInfoString("아래에  메일 수신하실 메일 주소를 입력해주세요.");
+		
+		try {
+//			HttpPost post = new HttpPost(URL);
+//			JSONObject payload = new JSONObject();
+//			payload.put("name", "myName");
+//			payload.put("age", "20");
+//			post.setEntity(new StringEntity(payload.toString(), ContentType.APPLICATION_JSON))
+			
+			double dValue = Math.random();
+		    int iValue = (int)(dValue * 10);
+		    String s = "";
+		    if(iValue % 2 == 0) {
+		    	String JobQuery = "select * from JobPolicy where JobPolicy.interestCode ='"+ interestCode +"'";
+				ResultSet r = getQuery(JobQuery);
+				
+				s = s + "\n"+name+"님을 위한 채용 행사 리스트를 보여드릴게요!\n";
+				while(r.next())
+				{
+							s = s + "채용행사 번호: " +
+							r.getString(1)+" | "+
+							"행사명: " +
+							r.getString(3)+" | "+
+							"행사기간: " +
+							r.getString(4)+" | "+
+							"\n----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n";	
+				}
+		    } else {
+		    	String RecruitmentEventQuery = "select * from RecruitmentEvent where areaCode = '" + areaCode + "'";
+				ResultSet r = getQuery(RecruitmentEventQuery);
+				s = s +"\n"+name+"님을 위한 채용 행사 리스트를 보여드릴게요!\n";
+				while(r.next())
+				{
+							s = s + "채용행사 번호: " +
+							r.getString(1)+" | "+
+							"행사명: " +
+							r.getString(3)+" | "+
+							"행사기간: " +
+							r.getString(4)+" | "+
+							"\n----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n";	
+				}
+		    }
+		    String payload = "{\"email\": \"" + email + "\", \"msg\": \"" + s + "\"}";
+		    StringEntity entity = new StringEntity(payload,
+	                ContentType.APPLICATION_FORM_URLENCODED);
+
+	        CloseableHttpClient httpClient = HttpClientBuilder.create().build();
+	        HttpPost request = new HttpPost("http://35.232.159.201:3001/api/mail");
+	        request.setEntity(entity);
+		    
+			//String jsonInputString = "{\"email\": \"" + email + "\", \"msg\": \"" + s + "\"}";
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		
 		System.out.print("\n정기 메일 수신 신청이 완료되었습니다.\n"
 				+ "확인 메일을 보내드렸으니 메일함을 확인해 보세요!\n");
 		return CorQ();
@@ -264,8 +337,6 @@ public class JobForYou {
 		int sltNum = 0; //for menu;
 		String name = null;
 		int age = 0;
-		int areaCode = 0;
-		String interestCode = null;
 		String eQuery = null;
 		String getInfoQuery = null;
 		
