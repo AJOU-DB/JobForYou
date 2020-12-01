@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.*;
-import java.net.http.*;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -27,7 +26,7 @@ import org.apache.hc.client5.http.classic.methods.HttpPost;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
 import org.apache.hc.client5.http.impl.classic.HttpClientBuilder;
 import org.apache.hc.core5.http.ContentType;
-import org.apache.hc.core5.http.io.entity.StringEntity;;
+import org.apache.hc.core5.http.io.entity.StringEntity;
 
 
 
@@ -240,12 +239,7 @@ public class JobForYou {
 		email = getInfoString("아래에  메일 수신하실 메일 주소를 입력해주세요.");
 		
 		try {
-//			HttpPost post = new HttpPost(URL);
-//			JSONObject payload = new JSONObject();
-//			payload.put("name", "myName");
-//			payload.put("age", "20");
-//			post.setEntity(new StringEntity(payload.toString(), ContentType.APPLICATION_JSON))
-			
+
 			double dValue = Math.random();
 		    int iValue = (int)(dValue * 10);
 		    String s = "";
@@ -293,7 +287,6 @@ public class JobForYou {
 	           os.write(json.getBytes("UTF-8"));
 	           os.close(); 
 	           InputStream in = new BufferedInputStream(conn.getInputStream());
-	           System.out.println(in);
 			
 		} catch (Exception e) {
 			e.printStackTrace();
