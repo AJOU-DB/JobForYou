@@ -22,12 +22,13 @@ import java.sql.Statement;
 import java.util.*;
 import java.util.Scanner;
 
+import org.apache.*;
 import org.apache.hc.client5.http.classic.methods.HttpPost;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
-import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
 import org.apache.hc.client5.http.impl.classic.HttpClientBuilder;
-import org.apache.hc.core5.http.io.entity.StringEntity;
-import org.apache.hc.core5.http.*;
+import org.apache.hc.core5.http.ContentType;
+import org.apache.hc.core5.http.io.entity.StringEntity;;
+
 
 
 public class JobForYou {
@@ -252,9 +253,9 @@ public class JobForYou {
 		    	String JobQuery = "select * from JobPolicy where JobPolicy.interestCode ='"+ interestCode +"'";
 				ResultSet r = getQuery(JobQuery);
 				
-				s = s + "\n"+name+"님을 위한 정책 리스트를 보여드릴게요!\n";
-				while(r.next())
-				{
+				s = s + name+"님을 위한 정책 리스트를 보여드릴게요!";
+				r.next();
+				
 							s = s + "사업명: " +
 							r.getString(4)+" | "+
 							"사업개요: " +
@@ -266,30 +267,36 @@ public class JobForYou {
 							"학력: " +
 							r.getString(10)+" | "+
 							"취업상태: " +
-							r.getString(11)+" | "+
-							"\n----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n";
-			    }
+							r.getString(11)+" | ";
 		    } else {
 		    	String RecruitmentEventQuery = "select * from RecruitmentEvent where areaCode = '" + areaCode + "'";
 				ResultSet r = getQuery(RecruitmentEventQuery);
-				s = s +"\n"+name+"님을 위한 채용 행사 리스트를 보여드릴게요!\n";
-				while(r.next())
-				{
+				s = s + name+"님을 위한 채용 행사 리스트를 보여드릴게요!";
+				r.next();
 							s = s + "채용행사 번호: " +
 							r.getString(1)+" | "+
 							"행사명: " +
 							r.getString(3)+" | "+
 							"행사기간: " +
-							r.getString(4)+" | "+
-							"\n----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n";	
-				}
+							r.getString(4)+" | ";
 		    }
-		    String payload = "{\"email\": \"" + email + "\", \"msg\": \"" + s + "\"}";
-		    StringEntity entity = new StringEntity(payload,ContentType.APPLICATION_FORM_URLENCODED);
-
-	        CloseableHttpClient httpClient = HttpClientBuilder.create().build();
-	        HttpPost request = new HttpPost("http://35.232.159.201:3001/api/mail");
-	        request.setEntity(entity);
+		    System.out.println(email + s);
+	        
+	        String json = "{\"email\": \"" + email + "\", \"msg\": \"" + s + "\"}";
+	        System.out.println(json);
+		    //String json = "{\"email\": \"shhan730@gmail.com\", \"msg\": \"123\"}";
+	        URL url = new URL("http://35.232.159.201:3001/api/mail");
+	           HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+	           conn.setConnectTimeout(5000);
+	           conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+	           conn.setDoOutput(true);
+	           conn.setDoInput(true);
+	           conn.setRequestMethod("POST");
+	           OutputStream os = conn.getOutputStream();
+	           os.write(json.getBytes("UTF-8"));
+	           os.close(); 
+	           InputStream in = new BufferedInputStream(conn.getInputStream());
+	           System.out.println(in);
 		    
 			//String jsonInputString = "{\"email\": \"" + email + "\", \"msg\": \"" + s + "\"}";
 			
