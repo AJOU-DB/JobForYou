@@ -280,11 +280,8 @@ public class JobForYou {
 							"행사기간: " +
 							r.getString(4)+" | ";
 		    }
-		    System.out.println(email + s);
 	        
 	        String json = "{\"email\": \"" + email + "\", \"msg\": \"" + s + "\"}";
-	        System.out.println(json);
-		    //String json = "{\"email\": \"shhan730@gmail.com\", \"msg\": \"123\"}";
 	        URL url = new URL("http://35.232.159.201:3001/api/mail");
 	           HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 	           conn.setConnectTimeout(5000);
@@ -297,8 +294,6 @@ public class JobForYou {
 	           os.close(); 
 	           InputStream in = new BufferedInputStream(conn.getInputStream());
 	           System.out.println(in);
-		    
-			//String jsonInputString = "{\"email\": \"" + email + "\", \"msg\": \"" + s + "\"}";
 			
 		} catch (Exception e) {
 			e.printStackTrace();
