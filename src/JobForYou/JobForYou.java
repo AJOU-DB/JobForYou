@@ -308,7 +308,7 @@ public class JobForYou {
 		// TODO Auto-generated method stub
 		// connect Database
 		        
-        String host = "34.94.93.148";
+        String host = "34.94.177.197";
         String port = "5432";
         String db_name = "postgres";
         String username = "postgres";
